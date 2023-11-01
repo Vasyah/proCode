@@ -15,7 +15,7 @@ if (name2 === "Vasilii") {
 }
 
 // 2 задание
-const health = 75;
+const health = 110;
 
 if (health === 100) {
   console.log("Вы здоровы");
@@ -34,3 +34,15 @@ if (health === 100) {
 } else {
   console.log(`Ваш уровень здорвья: ${health}`);
 }
+
+// 3 задание
+function checkUser(userName) {
+  if (userName === "Vasilii") {
+    console.log(`Приветствую, ${userName}`);
+  } else {
+    console.log("Вы еще не зарегистрированы. Зарегистроваться?");
+  }
+}
+
+checkUser('Виолетта');
+checkUser('Vasilii');
