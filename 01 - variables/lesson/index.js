@@ -6,4 +6,4 @@ const getUser = age => {
 	return user
 } 
 
-console.log(user) // user is not defined
+console.log(userName) // user is not defined
