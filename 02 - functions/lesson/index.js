@@ -9,7 +9,7 @@ if (name === "Vasilii") {
 }
 
 if (name2 === "Vasilii") {
-  console.log(`Приветствую, ${name}`);
+  console.log(`Приветствую, ${name2}`);
 } else {
   console.log("Вы еще не зарегистрированы. Зарегистроваться?");
 }
