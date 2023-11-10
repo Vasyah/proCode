@@ -1,9 +1,24 @@
-const taskData = {
+const taskData = [{
   id: 700,
   isEnable: true,
   title: "Заголовок задачи",
   subTitle: "Подзаголовок",
-};
+},{
+    id: 701,
+    isEnable: true,
+    title: "Новый заголовок задачи",
+    subTitle: "Подзаголовок",
+  },{
+    id: 702,
+    isEnable: false,
+    title: "Купить машину",
+    subTitle: "Купить новую машину по последнему писку моды",
+  },{
+    id: 703,
+    isEnable: true,
+    title: "Съездить в Сочи",
+    subTitle: "Найти способ попасть в Сочи, сходить в поход",
+  }];
 
 const tasksContainter = document.querySelector(".tasks");
 
@@ -62,4 +77,7 @@ const createItem = (task) => {
   return itemContainer;
 };
 
-tasksContainter.append(createItem(taskData));
+
+taskData.forEach(data => {
+    tasksContainter.append(createItem(data));
+});
