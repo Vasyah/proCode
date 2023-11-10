@@ -77,7 +77,7 @@ const createItem = (task) => {
   return itemContainer;
 };
 
-
 taskData.forEach(data => {
-    tasksContainter.append(createItem(data));
-});
+    // tasksContainter.append(createItem(data));
+    tasksContainter.appendChild(createItem(data));
+})
