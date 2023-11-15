@@ -61,11 +61,18 @@ function operatorCallback() {
   if (this.textContent === "=") {
     calculcator.secondNumber = Number(input.textContent);
 
-    calculcator.equality(calculcator.secondNumber, calculcator.currentOperator);
+    const operator = calculcator.lastOperator
+      ? calculcator.lastOperator
+      : calculcator.currentOperator;
+
+    calculcator.equality(calculcator.secondNumber, operator);
+
+    return;
   }
 
-  if (calculcator.firstNumber === 0) {
+  if (!calculcator.currentOperator) {
     calculcator.firstNumber = Number(input.textContent);
+    calculcator.lastOperator = "";
   } else {
     return;
   }
@@ -137,9 +144,10 @@ const calculcator = {
     input.textContent = this.result;
 
     //
-    this.firstNumber = this.result;
+    this.firstNumber = 0;
     this.secondNumber = 0;
-    this.result = 0;
+    this.lastOperator = this.currentOperator;
+    this.currentOperator = "";
   },
 
   getOperation(operator) {
