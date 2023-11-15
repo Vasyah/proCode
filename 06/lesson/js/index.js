@@ -1,45 +1,166 @@
+const log = (...info) => console.log(...info);
+
 const container = document.querySelector(".container");
 
-const input = container.querySelector(".input");
-const createTextEl = (operator, className, listener) => {
-  const container = document.createElement("div");
+const input = document.querySelector(".input");
 
-  container.textContent = operator;
+// кнопки с цифрами
+const numbersContainer = document.querySelector(".numbers");
+const numbers = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
 
-  // при наличии className добавляем элементу класс
-  if (className) {
-    container.classList = `${className}`;
+// кнопки с операторами
+const operatorsContainer = document.querySelector(".operators");
+const operators = ["*", "/", "+", "-", "="];
+
+/**
+ * Функция создаёт HTML элемент с тэгом div
+ * @param {*} value - значение, которое будет добавлено в элемент
+ * @param {*} classList - список классов, передаваемый строкой
+ * @returns
+ */
+const createEl = (value, classList, callback) => {
+  const element = document.createElement("div");
+
+  element.textContent = `${value}`;
+
+  // проверка на наличие классов
+  if (classList) {
+    element.classList = `${classList}`;
   }
 
-  if (listener) {
-    container.addEventListener("click", listener);
-  }
+  element.addEventListener("click", callback);
 
-  return container;
+  console.log(classList);
+
+  return element;
 };
 
-// операторы
-const operatorContainer = container.querySelector(".operators");
-const operators = ["/", "*", "-", "+", "="];
-
-const operatorElements = operators.map((operator) =>
-  createTextEl(operator, "operator")
+const numbersElements = numbers.map((element) =>
+  createEl(element, "", numberCallback)
 );
 
-operatorContainer.append(...operatorElements);
+numbersContainer.append(...numbersElements);
 
-// числа
-const numbersContainer = container.querySelector(".numbers");
-const numbers = [7, 8, 9, 4, 5, 6, 1, 2, 3];
-
-let firstNum = 0;
-const numberElements = numbers.map((operator) =>
-  createTextEl(operator, "", function () {
-    const isEmpty = input.textContent === "0";
-    input.textContent = isEmpty
-      ? this.textContent
-      : `${input.textContent}${this.textContent}`;
-  })
+const operatorsElements = operators.map((element) =>
+  createEl(element, "operator", operatorCallback)
 );
 
-numbersContainer.append(...numberElements);
+operatorsContainer.append(...operatorsElements);
+
+function numberCallback() {
+  const currentValue = input.textContent;
+  if (currentValue === "0") {
+    input.textContent = this.textContent;
+  } else {
+    input.textContent = `${currentValue}${this.textContent}`;
+  }
+}
+
+function operatorCallback() {
+  // сохраняем значение числа
+  if (this.textContent === "=") {
+    calculcator.secondNumber = Number(input.textContent);
+
+    calculcator.equality(calculcator.secondNumber, calculcator.currentOperator);
+  }
+
+  if (calculcator.firstNumber === 0) {
+    calculcator.firstNumber = Number(input.textContent);
+  } else {
+    return;
+  }
+
+  // получаем тип операции
+  calculcator.currentOperator = this.textContent;
+
+  // обнулить значение инпута
+  input.textContent = 0;
+
+  log(calculcator);
+}
+
+const calculcator = {
+  firstNumber: 0,
+  secondNumber: 0,
+  result: 0,
+
+  currentOperator: "",
+
+  // функция суммирования - это функция вычисляет сумму двух значений и выводит в консоль
+  sum(number1, number2) {
+    const result = number1 + number2;
+
+    console.log(`${number1} + ${number2} = ${result}`);
+
+    return result;
+  },
+
+  // функция вычитания - это функция вычисляет разность двух значений и выводит в консоль
+  minus(number1, number2) {
+    const result = number1 - number2;
+
+    console.log(`${number1} - ${number2} = ${result}`);
+
+    return result;
+  },
+
+  // функция умножения - это функция вычисляет произведение двух значений и выводит в консоль
+  multiply(number1, number2) {
+    const result = number1 * number2;
+
+    console.log(`${number1} * ${number2} = ${result}`);
+
+    return result;
+  },
+
+  // функция деления - это функция вычисляет деление двух значений и выводит в консоль
+  divide(number1, number2) {
+    const result = number1 / number2;
+
+    console.log(`${number1} / ${number2} = ${result}`);
+
+    return result;
+  },
+
+  equality(secondNumber, operator) {
+    // получаем операцию
+    const operation = this.getOperation(operator);
+
+    console.log(operation(this.firstNumber, this.secondNumber), this);
+
+    if (this.result) {
+      this.result = operation(+this.result, +secondNumber);
+    } else {
+      this.result = operation(+this.firstNumber, +this.secondNumber);
+    }
+
+    input.textContent = this.result;
+
+    //
+    this.firstNumber = this.result;
+    this.secondNumber = 0;
+    this.result = 0;
+  },
+
+  getOperation(operator) {
+    switch (operator) {
+      case "+":
+        return this.sum;
+      case "-":
+        return this.minus;
+      case "*":
+        return this.multiply;
+      case "/":
+        return this.divide;
+      default:
+        console.error("Выбрана неизвестная операция");
+        return;
+    }
+  },
+};
+
+// Логика выполнения оператора - после того, как мы ввели первое число и нажали на оператор - нам необходимо
+//запомнить значение первого числа
+//обнулить значение в инпуте
+//  начать ввод второго числа
+// при нажатии на равно - у нас происходит выполнении указанного оператора, т.е. сама операция будет выполнять только после нажатия на равно, значит нам необходимо запоминать название оператора
