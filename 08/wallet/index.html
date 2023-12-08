@@ -1,0 +1,53 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <button id="create-payment">createButton</button>
+    <div class="wallet"></div>
+
+    <div class="modal">
+      <form class="modal-form" id='form'>
+        <div>
+          <label for="name">Название платежа: <input
+            type="text"
+            name="name"
+            id="name"
+            placeholder="Введите название"
+            required
+          /></label
+          >
+        </div>
+        <div>
+          <label for="category">Категория платежа:   <select name="category" id="category" required>
+            <option>asdasd</option>
+            <option>asdasd</option>
+            <option>asdasd</option>
+            <option>asdasd</option>
+          </select></label>
+        
+        </div>
+        <div>
+          <label for="date">Дата платежа:   <input type="date" name="date" id="date" required  /></label>
+        
+
+        </div>
+        <div>
+          <label for="amount">Сумма платежа:  <input
+            type="text"
+            name="amount"
+            id="amount"
+            placeholder="Введите cумму"
+            required
+          /></label>
+         
+        </div>
+        <div class="modal-controls"><button type="submit">create</button><button id="modal-cancel">cancel</button></div>
+      </div>
+    </div>
+    <script src="js/main.js"></script>
+  </body>
+</html>

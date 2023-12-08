@@ -1,0 +1,59 @@
+.payment {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #000;
+  max-width: 750px;
+}
+
+.payment .cell {
+  min-height: 50px;
+
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.cell.name {
+  min-width: 150px;
+  max-width: 150px;
+  display: inline;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
+  max-width: 150px;
+}
+
+.modal * {
+  font-size: 1.5rem;
+}
+
+.modal {
+  display: none;
+  font-size: 1.5rem;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 3px solid #000;
+  background-color: #fff;
+  min-width: 500px;
+  min-height: 750px;;
+}
+
+.modal.visible{
+  
+  display: block;
+}
+.modal-form div {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #000;
+}
+
+.modal-controls {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%,0);
+}

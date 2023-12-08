@@ -1,0 +1,140 @@
+// структура задачи
+const taskData = [
+  {
+    id: 1,
+    title: "Zoolab",
+    description: "Pillsbury Baptist Bible College",
+    isComplete: true,
+  },
+  {
+    id: 2,
+    title: "Home Ing",
+    description: "London School of Business & Finance",
+    isComplete: true,
+  },
+  {
+    id: 3,
+    title: "Fix San",
+    description: "University of Catania",
+    isComplete: true,
+  },
+  {
+    id: 4,
+    title: "Stronghold",
+    description: "Christelijke Hogeschool Windesheim",
+    isComplete: false,
+  },
+  {
+    id: 5,
+    title: "Zamit",
+    description: "Xi'an University of Technology",
+    isComplete: true,
+  },
+  {
+    id: 6,
+    title: "It",
+    description: "Barnard College - Columbia University",
+    isComplete: true,
+  },
+  {
+    id: 7,
+    title: "Tampflex",
+    description: "Shimer College",
+    isComplete: true,
+  },
+  {
+    id: 8,
+    title: "Stronghold",
+    description:
+      "Fachhochschule Biberach, Hochschule für Bauwesen und Wirtschaft",
+    isComplete: true,
+  },
+  {
+    id: 9,
+    title: "Bamity",
+    description: "Albany State University",
+    isComplete: false,
+  },
+  {
+    id: 10,
+    title: "Fixflex",
+    description: "Gaziosmanpasa University",
+    isComplete: false,
+  },
+];
+
+// контейнер для задач
+const taskItem = document.querySelector(".task-container");
+
+/**
+ * Функция отвечает за создание элемента, отвечающего за состояние задачи
+ * @param {*} id
+ * @param {*} isComplete
+ */
+const createCheckbox = (id, isComplete) => {
+  const complete = document.createElement("input");
+
+  complete.classList = "complete";
+  complete.type = "checkbox";
+  complete.id = `${id}`;
+  complete.name = `${id}`;
+  complete.checked = isComplete;
+
+  return complete;
+};
+
+/**
+ * Функция отвечает за создание элемента описания задачи
+ * @param {*} title - заголовок задачи
+ * @param {*} description - описание задачи
+ */
+const createInfo = (title, description) => {
+  // контейнер для описания задачи
+  const info = document.createElement("div");
+  info.classList = "info";
+
+  const titleEl = document.createElement("h3");
+  titleEl.classList = "title";
+  titleEl.textContent = `${title}`;
+
+  const descriptionEl = document.createElement("p");
+  descriptionEl.classList = "description";
+  descriptionEl.textContent = `${description}`;
+  // в контейнер для описания задачи добавляем заголовок и описание
+  info.append(titleEl, descriptionEl);
+
+  return info;
+};
+
+// в общий контейнер задачи добавляем чекбокс и блок с описанием
+
+const createTask = (task) => {
+  // контейнер для одной задачи
+  const taskEl = document.createElement("div");
+  taskEl.classList = "item";
+
+  taskEl.append(
+    createCheckbox(task.id, task.isComplete),
+    createInfo(task.title, task.description)
+  );
+
+  return taskEl;
+};
+
+// в контейнер всех задач добавляем все задачи
+taskData.forEach((task) => taskItem.append(createAnotherTask(task)));
+
+function createAnotherTask(task) {
+  // контейнер для одной задачи
+  const taskEl = document.createElement("div");
+
+  console.log(task.isComplete);
+
+  const isChecked = task.isComplete ? 'checked' : ''
+
+  const html = `<div class="item"><input class="complete" type="checkbox" id=${task.id} name=${task.id} ${isChecked}> <div class="info"><h3 class="title">${task.title}</h3><p class="description">${task.description}</p></div></div>`;
+
+  taskEl.innerHTML = html;
+
+  return taskEl;
+}

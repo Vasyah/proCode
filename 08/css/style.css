@@ -1,0 +1,7 @@
+.drawPoint{
+    width: 10px;
+    height: 10px;
+    background-color: rgb(174, 51, 202);
+    position: absolute;
+    border-radius: 50%;
+}
