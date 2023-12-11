@@ -3,12 +3,42 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <h3>Список задач</h3>
-  
-    <div class="task-container"></div>
+    <div class="content">
+      <h1>Список задач</h3>
+      <div class="tasks-control">
+        <button class="btn" id="open-modal">Создать задачу</button>
+      </div>
+
+      <div class="task-container"></div>
+    </div>
+    <div id="modal-overlay">
+      <div class="modal">
+        <h2>Создание задачи</h2>
+        <form id="modal-form">
+          <label for="title"
+            >Название задачи: <input type="text" name="title" id="title" required
+          /></label>
+          <label for="description"
+            >Описание задачи:
+            <input type="text" name="description" id="description" required
+          /></label>
+          <label for="isComplete"
+            >Статус выполнения:
+            <input type="checkbox" name="isComplete" id="isComplete"
+          /></label>
+          <div class="modal-form-control">
+            <button class="btn outline" id="modal-save" type="submit">
+              Сохранить</button
+            ><button class="btn outline" id="modal-cancel" type="button">
+              Отменить
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
     <script src="js/index.js"></script>
   </body>
 </html>

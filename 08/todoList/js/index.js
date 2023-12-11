@@ -63,78 +63,117 @@ const taskData = [
   },
 ];
 
-// контейнер для задач
-const taskItem = document.querySelector(".task-container");
+// Создаём объект todoList
 
-/**
- * Функция отвечает за создание элемента, отвечающего за состояние задачи
- * @param {*} id
- * @param {*} isComplete
- */
-const createCheckbox = (id, isComplete) => {
-  const complete = document.createElement("input");
+const todoList = {
+  tasks: [],
+  taskContainer: document.querySelector(".task-container"),
 
-  complete.classList = "complete";
-  complete.type = "checkbox";
-  complete.id = `${id}`;
-  complete.name = `${id}`;
-  complete.checked = isComplete;
+  render(tasks) {
+    this.tasks = tasks;
 
-  return complete;
+    this.updateDOM(this.tasks, this.taskContainer);
+  },
+
+  createTask(task) {
+    const isChecked = task.isComplete ? "checked" : "";
+
+    const html = `
+    <div class="item">
+            <input
+              class="complete"
+              type="checkbox"
+              id="${task.id}"
+              name="${task.id}"
+              ${isChecked}
+            />
+            <div class="info">
+              <h3 class="title">${task.title}</h3>
+              <p class="description">${task.description}</p>
+            </div>
+            <div class="item-control">
+              <button class="btn outline">Редактировать</button>
+              <button class="btn outline">Удалить</button></div>
+          </div>`;
+
+    return html;
+  },
+
+  updateDOM(tasks, container) {
+    container.innerHTML = "";
+    let html = "";
+
+    this.tasks.forEach((task) => {
+      html += this.createTask(task);
+    });
+
+    container.insertAdjacentHTML("afterbegin", html);
+  },
+};
+
+todoList.render(taskData);
+
+// элемент формы
+const modal = document.querySelector("#modal-overlay");
+// элемент формы
+const form = document.querySelector("#modal-form");
+// кнопка отмены
+const cancelButton = document.querySelector("#modal-cancel");
+// кнопка открытия модалки
+const openModalButton = document.querySelector("#open-modal");
+
+const handleSubmit = (event) => {
+  console.log(event);
+  event.preventDefault();
+
+  const data = serializeForm(form);
+
+  data.id = Math.floor(Math.random() * 1000);
+
+  // добавляем новую задачу в список задач
+  const newTasks = todoList.tasks.concat(data);
+  setVisible(false);
+  todoList.render(newTasks);
 };
 
 /**
- * Функция отвечает за создание элемента описания задачи
- * @param {*} title - заголовок задачи
- * @param {*} description - описание задачи
+ * Функция отвечает за отображение модального окна
+ * @param visible - флаг отображения модального окна
  */
-const createInfo = (title, description) => {
-  // контейнер для описания задачи
-  const info = document.createElement("div");
-  info.classList = "info";
+const setVisible = (visible) => {
+  // элемент формы
+  const modal = document.querySelector("#modal-overlay");
 
-  const titleEl = document.createElement("h3");
-  titleEl.classList = "title";
-  titleEl.textContent = `${title}`;
-
-  const descriptionEl = document.createElement("p");
-  descriptionEl.classList = "description";
-  descriptionEl.textContent = `${description}`;
-  // в контейнер для описания задачи добавляем заголовок и описание
-  info.append(titleEl, descriptionEl);
-
-  return info;
+  if (visible) {
+    modal.classList = "visible";
+  } else {
+    modal.classList = "";
+  }
 };
 
-// в общий контейнер задачи добавляем чекбокс и блок с описанием
+// обработка создания задачи
+form.addEventListener("submit", handleSubmit);
 
-const createTask = (task) => {
-  // контейнер для одной задачи
-  const taskEl = document.createElement("div");
-  taskEl.classList = "item";
+openModalButton.addEventListener("click", function () {
+  setVisible(true);
+});
 
-  taskEl.append(
-    createCheckbox(task.id, task.isComplete),
-    createInfo(task.title, task.description)
-  );
+cancelButton.addEventListener("click", function () {
+  setVisible(false);
+});
 
-  return taskEl;
+const serializeForm = (form) => {
+  const elements = form.elements;
+  const elementsData = {};
+
+  Array.from(elements).forEach((element) => {
+    console.log(element);
+    if (element.type === "checkbox") {
+      elementsData[element.name] = element.checked;
+    } else {
+      elementsData[element.name] = element.value;
+    }
+  });
+
+  return elementsData;
 };
-
-// в контейнер всех задач добавляем все задачи
-taskData.forEach((task) => taskItem.append(createAnotherTask(task)));
-
-function createAnotherTask(task) {
-  // контейнер для одной задачи
-  const taskEl = document.createElement("div");
-
-  console.log(task.isComplete);
-
-  const isChecked = task.isComplete ? 'checked' : ''
-
-  const html = `<div class="item"><input class="complete" type="checkbox" id=${task.id} name=${task.id} ${isChecked}> <div class="info"><h3 class="title">${task.title}</h3><p class="description">${task.description}</p></div></div>`;
-
-  taskEl.innerHTML = html;
-
-  return taskEl;
-}
