@@ -35,13 +35,27 @@ const person = {
 
   name: "Urii",
 
-  getFullName(age) {
+  getName() {
+    function getAnotherThis() {
+      return this;
+    }
 
-    return `Name: ${this.name} age: ${age}`;
+    const getThis = () => this;
+
+    console.log(getAnotherThis); // undefined
+
+    return getThis().name;
   },
 };
 
-const getFullName = person.getFullName
+console.log(person.getThis()); // Window
+console.log(person.getName()); // Urii
+//   getFullName(age) {
+//     return `Name: ${this.name} age: ${age}`;
+//   },
+// };
 
-console.log(getFullName.apply(person,[20])) //Name: Urii age: 20
-console.log(getFullName.apply(person,[29])) //Name: Urii age: 29
+const getFullName = person.getFullName;
+
+console.log(getFullName.apply(person, [20])); //Name: Urii age: 20
+console.log(getFullName.apply(person, [29])); //Name: Urii age: 29

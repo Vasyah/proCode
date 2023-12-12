@@ -38,6 +38,8 @@
   max-width: calc(var(--task-size) * 0.6);
 }
 .item-control {
+  display: flex;
+  gap: var(--padding);
   margin-left: auto;
 }
 .task-container {

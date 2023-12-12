@@ -1,3 +1,6 @@
+"use strict";
+
+console.log(this);
 // структура задачи
 const taskData = [
   {
@@ -78,25 +81,54 @@ const todoList = {
   createTask(task) {
     const isChecked = task.isComplete ? "checked" : "";
 
-    const html = `
-    <div class="item">
-            <input
-              class="complete"
-              type="checkbox"
-              id="${task.id}"
-              name="${task.id}"
-              ${isChecked}
-            />
-            <div class="info">
-              <h3 class="title">${task.title}</h3>
-              <p class="description">${task.description}</p>
-            </div>
-            <div class="item-control">
-              <button class="btn outline">Редактировать</button>
-              <button class="btn outline">Удалить</button></div>
-          </div>`;
+    const openModalWithEdit = (event) => {
+      setVisible(true);
+      const id = event.target.getAttribute("data-id");
 
-    return html;
+      const task = this.tasks.find((task) => task.id === +id);
+      editModal(task);
+      console.log(task);
+    };
+
+    //  создаём кнопки
+    const itemControl = document.createElement("div");
+    itemControl.classList = "item-control";
+
+    const editButton = document.createElement("button");
+    editButton.classList = "btn outline";
+    editButton.setAttribute("data-id", task.id);
+    editButton.addEventListener("click", openModalWithEdit);
+    editButton.innerHTML = "Редактировать";
+
+    const deleteButton = document.createElement("button");
+    deleteButton.classList = "btn outline";
+    deleteButton.setAttribute("data-id", task.id);
+    deleteButton.addEventListener("click", openModalWithEdit);
+    deleteButton.innerHTML = "Удалить";
+
+    itemControl.insertAdjacentElement("beforeend", editButton);
+    itemControl.insertAdjacentElement("beforeend", deleteButton);
+
+    const item = document.createElement("div");
+    item.classList = "item";
+
+    const html = `
+      <input
+        class="complete"
+        type="checkbox"
+        id="${task.id}"
+        name="${task.id}"
+        ${isChecked}
+      />
+      <div class="info">
+        <h3 class="title">${task.title}</h3>
+        <p class="description">${task.description}</p>
+      </div>
+            `;
+
+    item.insertAdjacentHTML("afterbegin", html);
+    item.insertAdjacentElement("beforeend", itemControl);
+    return item;
   },
 
   updateDOM(tasks, container) {
@@ -104,10 +136,10 @@ const todoList = {
     let html = "";
 
     this.tasks.forEach((task) => {
-      html += this.createTask(task);
+      container.insertAdjacentElement("afterbegin", this.createTask(task));
     });
 
-    container.insertAdjacentHTML("afterbegin", html);
+    // container.insertAdjacentHTML("afterbegin", html);
   },
 };
 
@@ -161,6 +193,39 @@ openModalButton.addEventListener("click", function () {
 cancelButton.addEventListener("click", function () {
   setVisible(false);
 });
+
+const editModal = (task) => {
+  // инпут с название задачи
+  const titleContainer = modal.querySelector("#modal-title");
+  const title = titleContainer.querySelector("#title");
+
+  title.remove();
+  titleContainer.insertAdjacentHTML(
+    "beforeend",
+    `<input type="text" name="title" id="title" required value=${task.title} />`
+  );
+
+  // описание задачи
+  const descriptionContainer = modal.querySelector("#modal-description");
+  const description = descriptionContainer.querySelector("#description");
+
+  description.remove();
+  descriptionContainer.insertAdjacentHTML(
+    "beforeend",
+    `<input type="text" name="description" id="description" required value=${task.description} />`
+  );
+
+  // статус выполненности
+  const isCompleteContainer = modal.querySelector("#modal-isComplete");
+  const isComplete = isCompleteContainer.querySelector("#isComplete");
+
+  const isChecked = task.isComplete ? "checked" : "";
+  isComplete.remove();
+  isCompleteContainer.insertAdjacentHTML(
+    "beforeend",
+    `<input type="checkbox" name="isComplete" id="isComplete" ${isChecked} />`
+  );
+};
 
 const serializeForm = (form) => {
   const elements = form.elements;
