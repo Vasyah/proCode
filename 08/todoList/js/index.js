@@ -1,6 +1,3 @@
-"use strict";
-
-console.log(this);
 // структура задачи
 const taskData = [
   {
@@ -66,53 +63,25 @@ const taskData = [
   },
 ];
 
-// Создаём объект todoList
-
 const todoList = {
-  tasks: [],
-  taskContainer: document.querySelector(".task-container"),
+  data: [],
+  container: document.querySelector(".task-container"),
 
   render(tasks) {
-    this.tasks = tasks;
+    this.data = tasks;
 
-    this.updateDOM(this.tasks, this.taskContainer);
+    let html = "";
+
+    this.data.forEach((task) => (html += this.createTask(task)));
+
+    // в контейнер всех задач добавляем все задачи
+    this.container.insertAdjacentHTML("beforeend", html);
   },
-
   createTask(task) {
     const isChecked = task.isComplete ? "checked" : "";
 
-    const openModalWithEdit = (event) => {
-      setVisible(true);
-      const id = event.target.getAttribute("data-id");
-
-      const task = this.tasks.find((task) => task.id === +id);
-      editModal(task);
-      console.log(task);
-    };
-
-    //  создаём кнопки
-    const itemControl = document.createElement("div");
-    itemControl.classList = "item-control";
-
-    const editButton = document.createElement("button");
-    editButton.classList = "btn outline";
-    editButton.setAttribute("data-id", task.id);
-    editButton.addEventListener("click", openModalWithEdit);
-    editButton.innerHTML = "Редактировать";
-
-    const deleteButton = document.createElement("button");
-    deleteButton.classList = "btn outline";
-    deleteButton.setAttribute("data-id", task.id);
-    deleteButton.addEventListener("click", openModalWithEdit);
-    deleteButton.innerHTML = "Удалить";
-
-    itemControl.insertAdjacentElement("beforeend", editButton);
-    itemControl.insertAdjacentElement("beforeend", deleteButton);
-
-    const item = document.createElement("div");
-    item.classList = "item";
-
     const html = `
+    <div class="item">
       <input
         class="complete"
         type="checkbox"
@@ -124,121 +93,11 @@ const todoList = {
         <h3 class="title">${task.title}</h3>
         <p class="description">${task.description}</p>
       </div>
-            `;
+    </div>
+    `;
 
-    item.insertAdjacentHTML("afterbegin", html);
-    item.insertAdjacentElement("beforeend", itemControl);
-    return item;
-  },
-
-  updateDOM(tasks, container) {
-    container.innerHTML = "";
-    let html = "";
-
-    this.tasks.forEach((task) => {
-      container.insertAdjacentElement("afterbegin", this.createTask(task));
-    });
-
-    // container.insertAdjacentHTML("afterbegin", html);
+    return html;
   },
 };
 
 todoList.render(taskData);
-
-// элемент формы
-const modal = document.querySelector("#modal-overlay");
-// элемент формы
-const form = document.querySelector("#modal-form");
-// кнопка отмены
-const cancelButton = document.querySelector("#modal-cancel");
-// кнопка открытия модалки
-const openModalButton = document.querySelector("#open-modal");
-
-const handleSubmit = (event) => {
-  console.log(event);
-  event.preventDefault();
-
-  const data = serializeForm(form);
-
-  data.id = Math.floor(Math.random() * 1000);
-
-  // добавляем новую задачу в список задач
-  const newTasks = todoList.tasks.concat(data);
-  setVisible(false);
-  todoList.render(newTasks);
-};
-
-/**
- * Функция отвечает за отображение модального окна
- * @param visible - флаг отображения модального окна
- */
-const setVisible = (visible) => {
-  // элемент формы
-  const modal = document.querySelector("#modal-overlay");
-
-  if (visible) {
-    modal.classList = "visible";
-  } else {
-    modal.classList = "";
-  }
-};
-
-// обработка создания задачи
-form.addEventListener("submit", handleSubmit);
-
-openModalButton.addEventListener("click", function () {
-  setVisible(true);
-});
-
-cancelButton.addEventListener("click", function () {
-  setVisible(false);
-});
-
-const editModal = (task) => {
-  // инпут с название задачи
-  const titleContainer = modal.querySelector("#modal-title");
-  const title = titleContainer.querySelector("#title");
-
-  title.remove();
-  titleContainer.insertAdjacentHTML(
-    "beforeend",
-    `<input type="text" name="title" id="title" required value=${task.title} />`
-  );
-
-  // описание задачи
-  const descriptionContainer = modal.querySelector("#modal-description");
-  const description = descriptionContainer.querySelector("#description");
-
-  description.remove();
-  descriptionContainer.insertAdjacentHTML(
-    "beforeend",
-    `<input type="text" name="description" id="description" required value=${task.description} />`
-  );
-
-  // статус выполненности
-  const isCompleteContainer = modal.querySelector("#modal-isComplete");
-  const isComplete = isCompleteContainer.querySelector("#isComplete");
-
-  const isChecked = task.isComplete ? "checked" : "";
-  isComplete.remove();
-  isCompleteContainer.insertAdjacentHTML(
-    "beforeend",
-    `<input type="checkbox" name="isComplete" id="isComplete" ${isChecked} />`
-  );
-};
-
-const serializeForm = (form) => {
-  const elements = form.elements;
-  const elementsData = {};
-
-  Array.from(elements).forEach((element) => {
-    console.log(element);
-    if (element.type === "checkbox") {
-      elementsData[element.name] = element.checked;
-    } else {
-      elementsData[element.name] = element.value;
-    }
-  });
-
-  return elementsData;
-};
